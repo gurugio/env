@@ -1,0 +1,717 @@
+
+; default initialization library is loaded
+(setq inhibit-default-init nil)
+
+;;; =============================================================
+;;; Korean Language Environment
+;;; =============================================================
+
+; default character-set must be euc-kr
+(if enable-multibyte-characters
+    (set-language-environment "Korean")
+    (setq-default file-name-coding-system 'utf-8)
+    (prefer-coding-system 'euc-kr)
+    (set-default-coding-systems 'euc-kr)
+    (if  (not window-system)
+         (set-keyboard-coding-system 'euc-kr)
+         (set-terminal-coding-system 'euc-kr))
+    (set-selection-coding-system 'euc-kr)
+    ;; Hangul Mail setting
+    (setq-default sendmail-coding-system 'euc-kr))
+
+
+;;; =============================================================
+;;; Fonts and Frame for Unix X11
+;;; =============================================================
+
+(global-font-lock-mode 1)
+
+
+;;; =============================================================
+;;; Text Mode
+;;; =============================================================
+
+(setq default-major-mode (quote text-mode))
+
+(add-hook 'text-mode-hook
+          (function (lambda ()
+                      (setq fill-column 70)
+                      (turn-on-auto-fill))))
+
+;;; =============================================================
+;;; Programming Modes
+;;; =============================================================
+
+(c-add-style
+ "java"
+ '((c-basic-offset . 4)
+   (c-comment-only-line-offset '(0 . 4))
+   (c-hanging-comment-starter-p)
+   (c-offsets-alist
+    (topmost-intro-cont . +)
+    (statement-block-intro . +)
+    (substatement-open . 0)
+    (substatement . +)
+    (inline-open . 0)
+    (label . 0)
+    (statement-case-open . +)
+    (statement-cont . +)
+    (knr-argdecl-intro . 5)
+    (arglist-intro . +)
+    (arglist-close . c-lineup-arglist)
+    (brace-list-entry . 0)
+    (access-label . 0)
+    (inher-cont . c-lineup-java-inher)
+    (func-decl-cont . c-lineup-java-throws))))
+
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+
+;; Always end a file with a newline
+(setq require-final-newline t)
+
+;; Stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+
+(global-set-key [C-f1] 'man)
+(global-set-key [f2] 'grep)
+(global-set-key [f4] 'query-replace) 
+(global-set-key [f5] 'goto-line)
+(global-set-key "\M-g" 'goto-line)
+(global-set-key [f6] 'other-window)
+
+(global-set-key [f7] 'previous-error)
+(global-set-key [f8] 'next-error)    
+
+
+(global-set-key [f9] 'compile)
+(global-set-key [f10] 'shell) 
+(global-set-key [C-f12] 'indent-region)   
+
+
+(load-library "font-lock")
+(load-library "tex-mode")
+
+(load "cc-mode")
+
+(setq c-indent-level 4)
+(setq c-label-offset 4)
+(setq-default indent-tabs-mode nil) ; use space instead of tab
+(setq-default tab-width 4)
+(setq tab-width 4)
+
+(transient-mark-mode t)
+
+(autoload 'c++-mode "cc-mode" "C++ Editing Mode" t)
+(autoload 'c-mode   "cc-mode" "C Editing Mode" t)
+(autoload 'objc-mode "cc-mode" "Objective-C Editing Mode" t)
+(autoload 'java-mode "cc-mode" "Java Editing Mode" t)
+
+(defconst my-c-style
+  '((c-tab-always-indent        . t)
+    (c-hanging-colons-alist     . ((member-init-intro before)
+								   (inher-intro)
+								   (case-label after)
+								   (label after)
+								   (access-label after)))
+    (c-cleanup-list             . (scope-operator
+								   empty-defun-braces
+								   defun-close-semi))
+    (c-offsets-alist            . ((arglist-close . c-lineup-arglist)
+								   (substatement-open . 0)
+								   (case-label        . 4)
+								   (block-open        . 0)
+								   (knr-argdecl-intro . -)))
+    (c-echo-syntactic-information-p . t)
+    )
+  "My C Programming Style")
+
+
+;; Customizations for all of c-mode, c++-mode, and objc-mode
+(defun my-c-mode-common-hook ()
+  ;; add my personal style and set it for the current buffer
+  (font-lock-mode)
+  (c-add-style "PERSONAL" my-c-style t)
+  ;; offset customizations not in my-c-style
+  (c-set-offset 'member-init-intro '++)
+  ;; other customizations
+  (setq tab-width 4
+	;; this will make sure spaces are used instead of tabs
+	tab-to-tab-stop)
+  ;; we like auto-newline and hungry-delete
+;  (c-toggle-auto-hungry-state 1)
+  ;; keybindings for all supported languages.  We can put these in
+  ;; c-mode-base-map because c-mode-map, c++-mode-map, objc-mode-map,
+  ;; java-mode-map, and idl-mode-map inherit from it.
+  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
+  ;;-----------------------------------
+  ;; add settings for ALTIBASE
+  ;;-----------------------------------
+  (c-set-style "stroustrup")
+  (c-set-offset 'case-label '+)
+  (c-set-offset 'statement-case-open '+)
+  (c-set-offset 'inline-open 0)
+  (set-variable 'c-backslash-max-column 76)
+)
+
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+;;; do not use tab character
+(setq-default indent-tabs-mode nil)
+
+(setq auto-mode-alist
+      (append
+       '(("\\.C$" . c++-mode)
+         ("\\.H$" . c++-mode)
+         ("\\.cc$" . c++-mode)
+         ("\\.cpp$" . c++-mode)
+         ("\\.hh$" . c++-mode)
+         ("\\.c$" . c-mode)
+         ("\\.h$" . c-mode)
+         ("\\.i$" . c++-mode)
+         ("\\.l$" . c++-mode)
+         ("\\.y$" . c++-mode)
+         ("\\.in$" . makefile-mode)
+         ("\\.tsp$" . makefile-mode)
+         ("\\.mak$" . makefile-mode)
+         ("Makefile.$" . makefile-mode)
+         ("makefile.$" . makefile-mode)
+         ("\\.m$" . objc-mode)
+         ("\\.java$" . c++-mode)
+         ("\\.html$" . html-helper-mode)
+         ("\\.phtml$" . html-helper-mode)
+         (".emacs" . lisp-mode)
+         )
+       auto-mode-alist)
+      )
+
+(add-hook 'java-mode-hook
+	  (function (lambda ()
+		      (c-set-style "java"))))
+
+(global-set-key [C-f4] 'c-func-ide-test-through) ; 
+(global-set-key [C-f5] 'c-func-body)
+(global-set-key [C-f6] 'c-func-test-raise)   ; ide-test-raise
+(global-set-key [C-f7] 'c-func-ide-exception)   
+(global-set-key [C-f8] 'c-func-ide-exception-end) 
+(global-set-key [C-f10] 'c-comment)   ; comment 
+
+
+(if (and (eq system-type 'windows-nt)
+         (null window-system))
+    (progn
+      (setq-default grep-command "grep -n -e")
+      (setq-default grep-find-command 
+                    '("find . -type f -exec grep -n -e {} /dev/null \\;" . 32))
+      (setq-default grep-find-use-xargs nil)))
+
+
+;;; =============================================================
+;;; Version Control
+;;; =============================================================
+
+(setq vc-make-backup-files t)
+
+;;; =============================================================
+;;; Settings for Non-standard Packages
+;;; =============================================================
+
+
+;;; =============================================================
+;;; Calcualtor (ftp://ftp.hanq.net/pub/gnu/calc-2.02f.tar.gz)
+;;; =============================================================
+;;; Commands added by calc-public-autoloads on Mon Oct  6 21:31:58 1997.
+(autoload 'calc-dispatch	   "calc" "Calculator Options" t)
+(autoload 'full-calc		   "calc" "Full-screen Calculator" t)
+(autoload 'full-calc-keypad	   "calc" "Full-screen X Calculator" t)
+(autoload 'calc-eval		   "calc" "Use Calculator from Lisp")
+(autoload 'defmath		   "calc" nil t t)
+(autoload 'calc			   "calc" "Calculator Mode" t)
+(autoload 'quick-calc		   "calc" "Quick Calculator" t)
+(autoload 'calc-keypad		   "calc" "X windows Calculator" t)
+(autoload 'calc-embedded	   "calc" "Use Calc inside any buffer" t)
+(autoload 'calc-embedded-activate  "calc" "Activate =>'s in buffer" t)
+(autoload 'calc-grab-region	   "calc" "Grab region of Calc data" t)
+(autoload 'calc-grab-rectangle	   "calc" "Grab rectangle of data" t)
+(global-set-key "\e#" 'calc-dispatch)
+;;; End of Calc autoloads.
+
+
+;;; =============================================================
+;;; HTML Helper Mode (http://www.santafe.edu/~nelson/tools/)
+;;; =============================================================
+
+(autoload 'html-helper-mode "html-helper-mode" "Yay HTML" t)
+(add-hook 'html-helper-load-hook '(lambda () (require 'html-font)))
+(add-hook 'html-helper-mode-hook '(lambda () (font-lock-mode 1)))
+(setq html-helper-do-write-file-hooks t)
+(setq html-helper-build-new-buffer t)
+
+
+;;; =============================================================
+;;; Misc.
+;;; =============================================================
+
+(autoload 'which "which" nil t)
+
+
+;;; =============================================================
+;;; Private Settting and Customization
+;;; =============================================================
+;; To see available colors, run `M-x list-colors-dislay'
+
+
+(pc-selection-mode)
+(pc-bindings-mode)
+
+(setq line-number-mode t)
+;(tool-bar-mode)
+
+
+(set-foreground-color "black")
+(set-background-color "white")
+(set-face-foreground 'region "white")
+(set-face-background 'region "gray")
+(set-face-foreground 'modeline "lightsteelblue")
+(set-face-background 'modeline "midnightblue")
+(set-cursor-color "black")
+
+;copy result of "M-x color-theme-print"
+(defun my-color-theme ()
+  "Color theme by KimGiOh, created 2010-05-06."
+  (interactive)
+  (color-theme-install
+   '(my-color-theme
+     ((background-color . "Grey15")
+      (background-mode . dark)
+      (border-color . "Grey")
+      (cursor-color . "Grey")
+      (foreground-color . "Grey")
+      (mouse-color . "Grey"))
+     ((apropos-keybinding-face . underline)
+      (apropos-label-face italic variable-pitch)
+      (apropos-match-face . match)
+      (apropos-property-face . bold-italic)
+      (apropos-symbol-face . bold)
+      (compilation-message-face . underline)
+      (list-matching-lines-buffer-name-face . underline)
+      (list-matching-lines-face . bold)
+      (term-default-bg-color . "Grey15")
+      (term-default-fg-color . "Grey")
+      (view-highlight-face . highlight)
+      (widget-mouse-face . highlight))
+     (default ((t (:stipple nil :background "Grey15" :foreground "Grey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 134 :width normal :foundry "xos4" :family "Terminus"))))
+     (Info-title-1-face ((t (:bold t :weight bold :height 1.728 :family "helv"))))
+     (Info-title-2-face ((t (:bold t :weight bold :height 1.44 :family "helv"))))
+     (Info-title-3-face ((t (:bold t :weight bold :height 1.2 :family "helv"))))
+     (Info-title-4-face ((t (:bold t :weight bold :family "helv"))))
+     (bg:erc-color-face0 ((t (nil))))
+     (bg:erc-color-face1 ((t (nil))))
+     (bg:erc-color-face10 ((t (nil))))
+     (bg:erc-color-face11 ((t (nil))))
+     (bg:erc-color-face12 ((t (nil))))
+     (bg:erc-color-face13 ((t (nil))))
+     (bg:erc-color-face14 ((t (nil))))
+     (bg:erc-color-face15 ((t (nil))))
+     (bg:erc-color-face2 ((t (nil))))
+     (bg:erc-color-face3 ((t (nil))))
+     (bg:erc-color-face4 ((t (nil))))
+     (bg:erc-color-face5 ((t (nil))))
+     (bg:erc-color-face6 ((t (nil))))
+     (bg:erc-color-face7 ((t (nil))))
+     (bg:erc-color-face8 ((t (nil))))
+     (bg:erc-color-face9 ((t (nil))))
+     (bold ((t (:bold t :weight bold))))
+     (bold-italic ((t (:bold t :foreground "beige" :weight bold))))
+     (border ((t (:background "Grey"))))
+     (buffer-menu-buffer ((t (:bold t :weight bold))))
+     (button ((t (:underline t))))
+     (calendar-today-face ((t (:underline t))))
+     (comint-highlight-input ((t (:bold t :weight bold))))
+     (comint-highlight-prompt ((t (:foreground "cyan"))))
+     (compilation-column-number ((t (:bold t :weight bold :foreground "sky blue"))))
+     ;(compilation-error ((t (:bold t :weight bold :foreground "Orange" :background "red"))))
+     (compilation-error ((t (:bold t :weight bold :foreground "Orange"))))
+     (compilation-info ((t (:bold t :foreground "Green1" :weight bold))))
+     (compilation-line-number ((t (:bold t :weight bold :foreground "turquoise"))))
+     (compilation-warning ((t (:bold t :foreground "Orange" :weight bold))))
+     (completions-common-part ((t (:family "Terminus" :foundry "xos4" :width normal :weight normal :slant normal :underline nil :overline nil :strike-through nil :box nil :inverse-video nil :foreground "Grey" :background "Grey15" :stipple nil :height 134))))
+     (completions-first-difference ((t (:bold t :weight bold))))
+     (cperl-array-face ((t (:bold t :foreground "light salmon" :weight bold))))
+     (cperl-hash-face ((t (:italic t :bold t :foreground "beige" :slant italic :weight bold))))
+     (cperl-nonoverridable-face ((t (:foreground "aquamarine"))))
+     (cursor ((t (:background "Grey"))))
+     (custom-button ((t (:background "lightgrey" :foreground "gainsboro" :box (:line-width 2 :style released-button)))))
+     (custom-button-mouse ((t (:background "grey90" :foreground "black" :box (:line-width 2 :style released-button)))))
+     (custom-button-pressed ((t (:background "lightgrey" :foreground "black" :box (:line-width 2 :style pressed-button)))))
+     (custom-button-pressed-unraised ((t (:underline t :foreground "violet"))))
+     (custom-button-unraised ((t (:underline t))))
+     (custom-changed ((t (:background "blue" :foreground "white"))))
+     (custom-comment ((t (:background "dim gray"))))
+     (custom-comment-tag ((t (:foreground "gray80"))))
+     (custom-documentation ((t (:foreground "light blue"))))
+     (custom-face-tag ((t (:bold t :weight bold :foreground "turquoise" :underline t))))
+     (custom-group-tag ((t (:bold t :family "helv" :foreground "pale turquoise" :weight bold :height 1.2))))
+     (custom-group-tag-1 ((t (:bold t :family "helv" :foreground "pale turquoise" :underline t :weight bold :height 1.2))))
+     (custom-invalid ((t (:background "red" :foreground "yellow"))))
+     (custom-link ((t (:underline t :foreground "cyan1"))))
+     (custom-modified ((t (:background "blue" :foreground "white"))))
+     (custom-rogue ((t (:background "black" :foreground "pink"))))
+     (custom-saved ((t (:underline t))))
+     (custom-set ((t (:background "white" :foreground "blue"))))
+     (custom-state ((t (:foreground "light salmon"))))
+     (custom-themed ((t (:background "blue1" :foreground "white"))))
+     (custom-variable-button ((t (:bold t :underline t :weight bold))))
+     (custom-variable-tag ((t (:bold t :foreground "turquoise" :weight bold))))
+     (custom-visibility ((t (:underline t :foreground "cyan1" :height 0.8))))
+     (diary-face ((t (:foreground "red"))))
+     (dired-directory ((t (:bold t :weight bold :foreground "aquamarine"))))
+     (dired-face-directory ((t (:bold t :foreground "sky blue" :weight bold))))
+     (dired-face-executable ((t (:foreground "green yellow"))))
+     (dired-face-flagged ((t (:foreground "tomato"))))
+     (dired-face-marked ((t (:foreground "light salmon"))))
+     (dired-face-permissions ((t (:foreground "aquamarine"))))
+     (dired-flagged ((t (:bold t :weight bold :foreground "white" :background "red"))))
+     (dired-header ((t (:bold t :weight bold :foreground "sky blue"))))
+     (dired-ignored ((t (:foreground "grey70"))))
+     (dired-mark ((t (:bold t :weight bold :foreground "pale green"))))
+     (dired-marked ((t (:bold t :weight bold :foreground "white" :background "red"))))
+     (dired-perm-write ((t (:foreground "light blue"))))
+     (dired-symlink ((t (:bold t :weight bold :foreground "pale turquoise"))))
+     (dired-warning ((t (:bold t :weight bold :foreground "white" :background "red"))))
+     (eldoc-highlight-function-argument ((t (:bold t :weight bold))))
+     (erc-action-face ((t (nil))))
+     (erc-bold-face ((t (:bold t :weight bold))))
+     (erc-default-face ((t (nil))))
+     (erc-direct-msg-face ((t (:foreground "pale green"))))
+     (erc-error-face ((t (:bold t :foreground "IndianRed" :weight bold))))
+     (erc-highlight-face ((t (:bold t :foreground "pale green" :weight bold))))
+     (erc-input-face ((t (:foreground "light blue"))))
+     (erc-inverse-face ((t (:background "steel blue"))))
+     (erc-notice-face ((t (:foreground "light salmon"))))
+     (erc-pal-face ((t (:foreground "pale green"))))
+     (erc-prompt-face ((t (:bold t :foreground "light blue" :weight bold))))
+     (escape-glyph ((t (:foreground "cyan"))))
+     (eshell-ls-archive ((t (:bold t :foreground "Orchid" :weight bold))))
+     (eshell-ls-archive-face ((t (:bold t :foreground "Orchid" :weight bold))))
+     (eshell-ls-backup ((t (:foreground "LightSalmon"))))
+     (eshell-ls-backup-face ((t (:foreground "LightSalmon"))))
+     (eshell-ls-clutter ((t (:bold t :foreground "OrangeRed" :weight bold))))
+     (eshell-ls-clutter-face ((t (:bold t :foreground "OrangeRed" :weight bold))))
+     (eshell-ls-directory ((t (:bold t :foreground "SkyBlue" :weight bold))))
+     (eshell-ls-directory-face ((t (:bold t :foreground "SkyBlue" :weight bold))))
+     (eshell-ls-executable ((t (:bold t :foreground "Green" :weight bold))))
+     (eshell-ls-executable-face ((t (:bold t :foreground "Green" :weight bold))))
+     (eshell-ls-missing ((t (:bold t :foreground "white" :weight bold))))
+     (eshell-ls-missing-face ((t (:bold t :foreground "white" :weight bold))))
+     (eshell-ls-picture-face ((t (:foreground "violet"))))
+     (eshell-ls-product ((t (:foreground "LightSalmon"))))
+     (eshell-ls-product-face ((t (:foreground "LightSalmon"))))
+     (eshell-ls-readonly ((t (:foreground "Pink"))))
+     (eshell-ls-readonly-face ((t (:foreground "Pink"))))
+     (eshell-ls-special ((t (:bold t :foreground "Magenta" :weight bold))))
+     (eshell-ls-special-face ((t (:bold t :foreground "Magenta" :weight bold))))
+     (eshell-ls-symlink ((t (:bold t :foreground "Cyan" :weight bold))))
+     (eshell-ls-symlink-face ((t (:bold t :foreground "Cyan" :weight bold))))
+     (eshell-ls-unreadable ((t (:foreground "DarkGrey"))))
+     (eshell-ls-unreadable-face ((t (:foreground "DarkGrey"))))
+     (eshell-prompt ((t (:bold t :foreground "Pink" :weight bold))))
+     (eshell-prompt-face ((t (:bold t :foreground "Pink" :weight bold))))
+     (excerpt ((t (:italic t :slant italic))))
+     (fg:erc-color-face0 ((t (:foreground "white"))))
+     (fg:erc-color-face1 ((t (:foreground "beige"))))
+     (fg:erc-color-face10 ((t (:foreground "pale goldenrod"))))
+     (fg:erc-color-face11 ((t (:foreground "light goldenrod yellow"))))
+     (fg:erc-color-face12 ((t (:foreground "light yellow"))))
+     (fg:erc-color-face13 ((t (:foreground "yellow"))))
+     (fg:erc-color-face14 ((t (:foreground "light goldenrod"))))
+     (fg:erc-color-face15 ((t (:foreground "lime green"))))
+     (fg:erc-color-face2 ((t (:foreground "lemon chiffon"))))
+     (fg:erc-color-face3 ((t (:foreground "light cyan"))))
+     (fg:erc-color-face4 ((t (:foreground "powder blue"))))
+     (fg:erc-color-face5 ((t (:foreground "sky blue"))))
+     (fg:erc-color-face6 ((t (:foreground "dark sea green"))))
+     (fg:erc-color-face7 ((t (:foreground "pale green"))))
+     (fg:erc-color-face8 ((t (:foreground "medium spring green"))))
+     (fg:erc-color-face9 ((t (:foreground "khaki"))))
+     (file-name-shadow ((t (:foreground "grey70"))))
+     (fixed ((t (:bold t :weight bold))))
+     (fixed-pitch ((t (:family "courier"))))
+     (flyspell-duplicate-face ((t (:bold t :foreground "Gold3" :underline t :weight bold))))
+     (flyspell-incorrect-face ((t (:bold t :foreground "OrangeRed" :underline t :weight bold))))
+     (font-lock-builtin-face ((t (:foreground "aquamarine"))))
+     (font-lock-comment-delimiter-face ((t (:foreground "light blue"))))
+     (font-lock-comment-face ((t (:foreground "light blue"))))
+     (font-lock-constant-face ((t (:bold t :foreground "pale green" :weight bold))))
+     (font-lock-doc-face ((t (:foreground "light sky blue"))))
+     (font-lock-doc-string-face ((t (:foreground "sky blue"))))
+     (font-lock-function-name-face ((t (:bold t :foreground "aquamarine" :weight bold))))
+     (font-lock-keyword-face ((t (:bold t :foreground "pale turquoise" :weight bold))))
+     (font-lock-negation-char-face ((t (nil))))
+     (font-lock-preprocessor-face ((t (:foreground "CornFlowerBlue" :slant normal))))
+     (font-lock-reference-face ((t (:foreground "pale green"))))
+     (font-lock-regexp-grouping-backslash ((t (:bold t :weight bold))))
+     (font-lock-regexp-grouping-construct ((t (:bold t :weight bold))))
+     (font-lock-string-face ((t (:foreground "light sky blue"))))
+     (font-lock-type-face ((t (:bold t :foreground "sky blue" :weight bold))))
+     (font-lock-variable-name-face ((t (:bold t :foreground "turquoise" :weight bold))))
+     (font-lock-warning-face ((t (:bold t :background "red" :foreground "white" :weight bold))))
+     (fringe ((t (:background "Grey15"))))
+     (gnus-cite-face-1 ((t (:foreground "LightSalmon"))))
+     (gnus-cite-face-2 ((t (:foreground "Khaki"))))
+     (gnus-cite-face-3 ((t (:foreground "Coral"))))
+     (gnus-cite-face-4 ((t (:foreground "yellow green"))))
+     (gnus-cite-face-5 ((t (:foreground "dark khaki"))))
+     (gnus-cite-face-6 ((t (:foreground "bisque"))))
+     (gnus-cite-face-7 ((t (:foreground "peru"))))
+     (gnus-cite-face-8 ((t (:foreground "light coral"))))
+     (gnus-cite-face-9 ((t (:foreground "plum"))))
+     (gnus-emphasis-bold ((t (:bold t :weight bold))))
+     (gnus-emphasis-bold-italic ((t (:italic t :bold t :slant italic :weight bold))))
+     (gnus-emphasis-highlight-words ((t (:background "black" :foreground "yellow"))))
+     (gnus-emphasis-italic ((t (:italic t :slant italic))))
+     (gnus-emphasis-strikethru ((t (nil))))
+     (gnus-emphasis-underline ((t (:underline t))))
+     (gnus-emphasis-underline-bold ((t (:bold t :underline t :weight bold))))
+     (gnus-emphasis-underline-bold-italic ((t (:italic t :bold t :underline t :slant italic :weight bold))))
+     (gnus-emphasis-underline-italic ((t (:italic t :underline t :slant italic))))
+     (gnus-group-mail-1-empty-face ((t (:foreground "White"))))
+     (gnus-group-mail-1-face ((t (:bold t :foreground "White" :weight bold))))
+     (gnus-group-mail-2-empty-face ((t (:foreground "light cyan"))))
+     (gnus-group-mail-2-face ((t (:bold t :foreground "light cyan" :weight bold))))
+     (gnus-group-mail-3-empty-face ((t (:foreground "LightBlue"))))
+     (gnus-group-mail-3-face ((t (:bold t :foreground "LightBlue" :weight bold))))
+     (gnus-group-mail-low-empty-face ((t (:foreground "Aquamarine"))))
+     (gnus-group-mail-low-face ((t (:bold t :foreground "Aquamarine" :weight bold))))
+     (gnus-group-news-1-empty-face ((t (:foreground "White"))))
+     (gnus-group-news-1-face ((t (:bold t :foreground "White" :weight bold))))
+     (gnus-group-news-2-empty-face ((t (:foreground "light cyan"))))
+     (gnus-group-news-2-face ((t (:bold t :foreground "light cyan" :weight bold))))
+     (gnus-group-news-3-empty-face ((t (:foreground "LightBlue"))))
+     (gnus-group-news-3-face ((t (:bold t :foreground "LightBlue" :weight bold))))
+     (gnus-group-news-4-empty-face ((t (:foreground "Aquamarine"))))
+     (gnus-group-news-4-face ((t (:bold t :foreground "Aquamarine" :weight bold))))
+     (gnus-group-news-5-empty-face ((t (:foreground "MediumAquamarine"))))
+     (gnus-group-news-5-face ((t (:bold t :foreground "MediumAquamarine" :weight bold))))
+     (gnus-group-news-6-empty-face ((t (:foreground "MediumAquamarine"))))
+     (gnus-group-news-6-face ((t (:bold t :foreground "MediumAquamarine" :weight bold))))
+     (gnus-group-news-low-empty-face ((t (:foreground "MediumAquamarine"))))
+     (gnus-group-news-low-face ((t (:bold t :foreground "MediumAquamarine" :weight bold))))
+     (gnus-header-content-face ((t (:foreground "LightSkyBlue3"))))
+     (gnus-header-from-face ((t (:bold t :foreground "light cyan" :weight bold))))
+     (gnus-header-name-face ((t (:bold t :foreground "LightBlue" :weight bold))))
+     (gnus-header-newsgroups-face ((t (:italic t :bold t :foreground "MediumAquamarine" :slant italic :weight bold))))
+     (gnus-header-subject-face ((t (:bold t :foreground "light cyan" :weight bold))))
+     (gnus-server-agent-face ((t (:bold t :foreground "PaleTurquoise" :weight bold))))
+     (gnus-server-closed-face ((t (:italic t :foreground "Light Steel Blue" :slant italic))))
+     (gnus-server-denied-face ((t (:bold t :foreground "Pink" :weight bold))))
+     (gnus-server-offline-face ((t (:bold t :foreground "Yellow" :weight bold))))
+     (gnus-server-opened-face ((t (:bold t :foreground "Green1" :weight bold))))
+     (gnus-signature-face ((t (:foreground "Grey"))))
+     (gnus-splash-face ((t (:foreground "ForestGreen"))))
+     (gnus-summary-cancelled-face ((t (:background "Black" :foreground "Yellow"))))
+     (gnus-summary-high-ancient-face ((t (:bold t :foreground "MediumAquamarine" :weight bold))))
+     (gnus-summary-high-read-face ((t (:bold t :foreground "Aquamarine" :weight bold))))
+     (gnus-summary-high-ticked-face ((t (:bold t :foreground "LightSalmon" :weight bold))))
+     (gnus-summary-high-unread-face ((t (:italic t :bold t :foreground "beige" :slant italic :weight bold))))
+     (gnus-summary-low-ancient-face ((t (:italic t :foreground "DimGray" :slant italic))))
+     (gnus-summary-low-read-face ((t (:foreground "slate gray"))))
+     (gnus-summary-low-ticked-face ((t (:foreground "Pink"))))
+     (gnus-summary-low-unread-face ((t (:foreground "LightGray"))))
+     (gnus-summary-normal-ancient-face ((t (:foreground "MediumAquamarine"))))
+     (gnus-summary-normal-read-face ((t (:foreground "Aquamarine"))))
+     (gnus-summary-normal-ticked-face ((t (:foreground "LightSalmon"))))
+     (gnus-summary-normal-unread-face ((t (nil))))
+     (gnus-summary-selected-face ((t (:underline t))))
+     (header-line ((t (:background "grey20" :foreground "grey90" :box nil))))
+     (help-argument-name ((t (nil))))
+     (highlight ((t (:background "dark slate blue" :foreground "light blue"))))
+     (highline-face ((t (:background "DeepSkyBlue4"))))
+     (holiday-face ((t (:background "pink"))))
+     (info-header-node ((t (:bold t :weight bold))))
+     (info-header-xref ((t (:bold t :foreground "sky blue" :weight bold))))
+     (info-menu-5 ((t (:underline t))))
+     (info-menu-header ((t (:bold t :weight bold :family "helv"))))
+     (info-node ((t (:bold t :weight bold))))
+     (info-xref ((t (:bold t :foreground "sky blue" :weight bold))))
+     (isearch ((t (:background "slate blue"))))
+     (isearch-fail ((t (:background "red4"))))
+     (italic ((t (:foreground "sky blue"))))
+     (jde-bug-breakpoint-cursor ((t (:background "brown" :foreground "cyan"))))
+     (jde-bug-breakpoint-marker ((t (:background "yellow" :foreground "red"))))
+     (jde-java-font-lock-api-face ((t (:foreground "light goldenrod"))))
+     (jde-java-font-lock-bold-face ((t (:bold t :weight bold))))
+     (jde-java-font-lock-code-face ((t (nil))))
+     (jde-java-font-lock-constant-face ((t (:foreground "Aquamarine"))))
+     (jde-java-font-lock-doc-tag-face ((t (:foreground "light coral"))))
+     (jde-java-font-lock-italic-face ((t (:italic t :slant italic))))
+     (jde-java-font-lock-link-face ((t (:foreground "blue" :underline t :slant normal))))
+     (jde-java-font-lock-modifier-face ((t (:foreground "LightSteelBlue"))))
+     (jde-java-font-lock-number-face ((t (:foreground "LightSalmon"))))
+     (jde-java-font-lock-package-face ((t (:foreground "steelblue1"))))
+     (jde-java-font-lock-pre-face ((t (nil))))
+     (jde-java-font-lock-underline-face ((t (:underline t))))
+     (lazy-highlight ((t (:background "paleturquoise4"))))
+     (link ((t (:foreground "cyan1" :underline t))))
+     (link-visited ((t (:underline t :foreground "violet"))))
+     (makefile-space-face ((t (:background "hotpink"))))
+     (match ((t (:background "RoyalBlue3"))))
+     (menu ((t (:background "MidnightBlue" :foreground "Grey"))))
+     (message-cited-text-face ((t (:foreground "LightSalmon"))))
+     (message-header-cc-face ((t (:foreground "light cyan"))))
+     (message-header-name-face ((t (:foreground "LightBlue"))))
+     (message-header-newsgroups-face ((t (:italic t :bold t :foreground "MediumAquamarine" :slant italic :weight bold))))
+     (message-header-other-face ((t (:foreground "MediumAquamarine"))))
+     (message-header-subject-face ((t (:bold t :foreground "light cyan" :weight bold))))
+     (message-header-to-face ((t (:bold t :foreground "light cyan" :weight bold))))
+     (message-header-xheader-face ((t (:foreground "MediumAquamarine"))))
+     (message-mml-face ((t (:foreground "ForestGreen"))))
+     (message-separator-face ((t (:foreground "chocolate"))))
+     (minibuffer-prompt ((t (:foreground "cyan"))))
+     (mode-line ((t (:background "midnightblue" :foreground "lightsteelblue" :box (:line-width -1 :style released-button)))))
+     (mode-line-buffer-id ((t (:bold t :weight bold))))
+     (mode-line-emphasis ((t (:bold t :weight bold))))
+     (mode-line-highlight ((t (:box (:line-width 2 :color "grey40" :style released-button)))))
+     (mode-line-inactive ((t (:background "grey30" :foreground "grey80" :box (:line-width -1 :color "grey40" :style nil) :weight light))))
+     (mouse ((t (:background "Grey"))))
+     (next-error ((t (:foreground "white" :background "gray"))))
+     (nobreak-space ((t (:foreground "cyan" :underline t))))
+     (quack-about-face ((t (:family "Helvetica"))))
+     (quack-about-title-face ((t (:bold t :foreground "#00f000" :weight bold :height 2.0 :family "Helvetica"))))
+     (quack-banner-face ((t (:family "Helvetica"))))
+     (quack-pltfile-dir-face ((t (:bold t :background "gray33" :foreground "white" :weight bold :height 1.2 :family "Helvetica"))))
+     (quack-pltfile-file-face ((t (:bold t :background "gray66" :foreground "black" :weight bold :height 1.2 :family "Helvetica"))))
+     (quack-pltfile-prologue-face ((t (:background "gray66" :foreground "black"))))
+     (quack-pltish-class-defn-face ((t (:bold t :weight bold :foreground "purple1"))))
+     (quack-pltish-colon-keyword-face ((t (:bold t :foreground "gray50" :weight bold))))
+     (quack-pltish-comment-face ((t (:foreground "cyan1"))))
+     (quack-pltish-defn-face ((t (:bold t :foreground "blue1" :weight bold))))
+     (quack-pltish-keyword-face ((t (:bold t :weight bold))))
+     (quack-pltish-module-defn-face ((t (:bold t :weight bold :foreground "purple1"))))
+     (quack-pltish-paren-face ((t (:foreground "red1"))))
+     (quack-pltish-selfeval-face ((t (:foreground "green2"))))
+     (quack-smallprint-face ((t (:height 0.8 :family "Courier"))))
+     (quack-threesemi-h1-face ((t (:bold t :weight bold :height 1.4 :family "Helvetica"))))
+     (quack-threesemi-h2-face ((t (:bold t :weight bold :height 1.2 :family "Helvetica"))))
+     (quack-threesemi-h3-face ((t (:bold t :weight bold :family "Helvetica"))))
+     (quack-threesemi-semi-face ((t (:background "cyan4" :foreground "cyan2"))))
+     (quack-threesemi-text-face ((t (:background "cyan4" :foreground "white"))))
+     (query-replace ((t (:background "slate blue"))))
+     (region ((t (:background "gray" :foreground "white"))))
+     (scroll-bar ((t (:background "grey75"))))
+     (secondary-selection ((t (:background "steel blue"))))
+     (semantic-dirty-token-face ((t (:background "gray10"))))
+     (semantic-unmatched-syntax-face ((t (:underline "red"))))
+     (shadow ((t (:foreground "grey70"))))
+     (show-paren-match ((t (:background "light slate blue" :foreground "white"))))
+     (show-paren-mismatch ((t (:background "red" :foreground "white"))))
+     (sldb-catch-tag-face ((t (nil))))
+     (sldb-condition-face ((t (nil))))
+     (sldb-detailed-frame-line-face ((t (nil))))
+     (sldb-frame-label-face ((t (nil))))
+     (sldb-frame-line-face ((t (nil))))
+     (sldb-local-name-face ((t (nil))))
+     (sldb-local-value-face ((t (nil))))
+     (sldb-non-restartable-frame-line-face ((t (nil))))
+     (sldb-reference-face ((t (:underline t))))
+     (sldb-restart-face ((t (nil))))
+     (sldb-restart-number-face ((t (:bold t :weight bold))))
+     (sldb-restart-type-face ((t (:bold t :weight bold :foreground "pale turquoise"))))
+     (sldb-restartable-frame-line-face ((t (:foreground "lime green"))))
+     (sldb-section-face ((t (nil))))
+     (sldb-topline-face ((t (nil))))
+     (slime-error-face ((t (:underline "red"))))
+     (slime-highlight-edits-face ((t (:background "dimgray"))))
+     (slime-highlight-face ((t (:foreground "light blue" :background "dark slate blue" :underline nil))))
+     (slime-inspector-action-face ((t (:bold t :weight bold :foreground "white" :background "red"))))
+     (slime-inspector-label-face ((t (:bold t :weight bold :foreground "pale green"))))
+     (slime-inspector-topline-face ((t (nil))))
+     (slime-inspector-type-face ((t (:bold t :weight bold :foreground "sky blue"))))
+     (slime-inspector-value-face ((t (:foreground "aquamarine"))))
+     (slime-note-face ((t (:underline "light goldenrod"))))
+     (slime-reader-conditional-face ((t (:foreground "light blue"))))
+     (slime-repl-input-face ((t (:bold t :weight bold))))
+     (slime-repl-inputed-output-face ((t (:foreground "white"))))
+     (slime-repl-output-face ((t (:foreground "light sky blue"))))
+     (slime-repl-output-mouseover-face ((t (:foreground "white" :box (:line-width 1 :color "black" :style released-button)))))
+     (slime-repl-prompt-face ((t (:bold t :weight bold :foreground "pale turquoise"))))
+     (slime-repl-result-face ((t (nil))))
+     (slime-style-warning-face ((t (:underline "gold"))))
+     (slime-warning-face ((t (:underline "coral"))))
+     (speedbar-button-face ((t (:foreground "seashell2"))))
+     (speedbar-directory-face ((t (:foreground "seashell3"))))
+     (speedbar-file-face ((t (:foreground "seashell4"))))
+     (speedbar-highlight-face ((t (:background "dark slate blue" :foreground "wheat"))))
+     (speedbar-selected-face ((t (:foreground "seashell1" :underline t))))
+     (speedbar-separator-face ((t (:background "blue" :foreground "white" :overline "gray"))))
+     (speedbar-tag-face ((t (:foreground "antique white"))))
+     (subscript ((t (:height tex-suscript-height))))
+     (superscript ((t (:height tex-suscript-height))))
+     (tex-math ((t (:foreground "light sky blue"))))
+     (tex-verbatim ((t (:family "courier"))))
+     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
+     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     (trailing-whitespace ((t (:background "red"))))
+     (underline ((t (:underline t))))
+     (variable-pitch ((t (:family "helv"))))
+     (vertical-border ((t (nil))))
+     (widget-button ((t (:bold t :weight bold))))
+     (widget-button-pressed ((t (:foreground "red"))))
+     (widget-documentation ((t (:foreground "light blue"))))
+     (widget-field ((t (:background "RoyalBlue4" :foreground "wheat"))))
+     (widget-inactive ((t (:foreground "dim gray"))))
+     (widget-single-line-field ((t (:background "slate blue" :foreground "wheat"))))
+     (woman-bold-face ((t (:bold t :foreground "sky blue" :weight bold))))
+     (woman-italic-face ((t (:foreground "deep sky blue"))))
+     (woman-unknown-face ((t (:foreground "LightSalmon"))))
+     (zmacs-region ((t (:background "DarkSlateBlue")))))))
+
+;color theme
+(setq load-path (cons "c:/emacs/site-lisp/emacs-goodies-el" load-path))
+(require 'color-theme)
+;(color-theme-charcoal-black)
+(my-color-theme)
+
+(setq blink-matching-delay 0.1)
+(setq standard-indent 4)
+(setq scroll-step 1)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(default-input-method "korean-hangul")
+ '(quack-default-program "guile")
+ '(show-paren-mode t)
+ '(speedbar-frame-parameters (quote ((minibuffer) (width . 20) (border-width . 0) (menu-bar-lines . 0) (tool-bar-lines . 0) (unsplittable . t) (set-background-color "black"))))
+ '(tool-bar-mode nil nil (tool-bar)))
+
+(setq make-backup-files nil)
+
+;; GNU GLOBAL for source tag
+(load "c:/emacs/site-lisp/gtags.el")
+(add-hook 'c-mode-common-hook
+          (lambda () (gtags-mode 1)))
+(global-set-key "\C-c\M-." 'gtags-find-rtag)
+
+;; hangul input - use system-default input
+
+
+;; set font
+;;(set-face-font 'default "-*-terminus-medium-r-normal-*-16-*-*-*-*-*-*-*")
+
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "Grey15" :foreground "Grey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "outline" :family "Consolas")))))
