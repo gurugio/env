@@ -210,16 +210,10 @@
 (setq load-path (cons "~/env/els" load-path))
 
 
-(pc-selection-mode)
-(pc-bindings-mode)
-
-
 (set-foreground-color "black")
 (set-background-color "white")
 (set-face-foreground 'region "white")
 (set-face-background 'region "gray")
-(set-face-foreground 'modeline "lightsteelblue")
-(set-face-background 'modeline "midnightblue")
 (set-cursor-color "black")
 
 ;color theme
@@ -258,25 +252,6 @@
 
 ;; set font
 (set-face-font 'default "-*-terminus-medium-r-normal-*-16-*-*-*-*-*-*-*")
-
-;; doxymacs (doxygen+emacs)
-;C-c d ? will look up documentation for the symbol under the point.
-;C-c d r will rescan your Doxygen tags file.
-;C-c d f will insert a Doxygen comment for the next function.
-;C-c d i will insert a Doxygen comment for the current file.
-;C-c d ; will insert a Doxygen comment for a member variable on the current line (like M-;).
-;C-c d m will insert a blank multi-line Doxygen comment.
-;C-c d s will insert a blank single-line Doxygen comment.
-;C-c d @ will insert grouping comments around the current region.
-
-(require 'doxymacs)
-(add-hook 'c-mode-common-hook 'doxymacs-mode)
-(add-hook 'c++-mode-common-hook 'doxymacs-mode)
-
-(defun my-doxymacs-font-lock-hook ()
-  (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-      (doxymacs-font-lock)))
-(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
 
 ;; function to reload .emacs
 (defun reload-dotemacs ()
@@ -350,14 +325,6 @@
                          '(2 "_NET_WM_STATE_FULLSCREEN" 0)))
 
 
-;; run ipython as M-x ipython
-(setq ipython-command "/usr/bin/ipython")
-(require 'ipython)
-(setq-default py-python-command-args '("--pylab" "--colors=Linux"))
-
-;(require 'python-mode)
-(add-hook 'python-mode-hook '(lambda () 
-                              (setq python-indent 4)))
 
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
