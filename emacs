@@ -9,7 +9,6 @@
 ;;; =============================================================
 
 (if enable-multibyte-characters
-;;    (set-language-environment "Korean")
     (setq-default file-name-coding-system 'utf-8)
     (prefer-coding-system 'utf-8)
     (set-default-coding-systems 'utf-8)
@@ -57,30 +56,37 @@
 (global-set-key [C-f1] 'man)
 (global-set-key [f2] 'grep)
 (global-set-key [f3] 'svn-status)
-(global-set-key [f4] 'query-replace) 
+(global-set-key [f4] 'query-replace)
 (global-set-key [f5] 'goto-line)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key [f6] 'other-window)
 
 (global-set-key [f7] 'previous-error)
-(global-set-key [f8] 'next-error)    
+(global-set-key [f8] 'next-error)
 
 
 (global-set-key [f9] 'compile)
-(global-set-key [f10] 'eshell) 
-(global-set-key [C-f12] 'indent-region)   
+(global-set-key [f10] 'eshell)
+(global-set-key [C-f12] 'indent-region)
 
 
 (load-library "font-lock")
 (load-library "tex-mode")
 
-(load "cc-mode")
+;(load "cc-mode")
 
-(setq c-indent-level 4)
-(setq c-label-offset 4)
-(setq-default indent-tabs-mode nil) ; use space instead of tab
-(setq-default tab-width 4)
-(setq tab-width 4)
+(setq c-indent-level 8)
+(setq c-label-offset 8)
+(setq-default indent-tabs-mode t) ; use tab
+(setq-default tab-width 8)
+(setq tab-width 8)
+
+(setq sh-basic-offset 8)
+(setq sh-indentation 8)
+
+
+(setq c-default-style "linux"
+      c-basic-offset 8) ; linux-kernel style
 
 (transient-mark-mode t)
 
@@ -89,62 +95,9 @@
 (autoload 'objc-mode "cc-mode" "Objective-C Editing Mode" t)
 (autoload 'java-mode "cc-mode" "Java Editing Mode" t)
 
-;; (defconst my-c-style
-;;   '((c-tab-always-indent        . t)
-;;     (c-hanging-colons-alist     . ((member-init-intro before)
-;; 								   (inher-intro)
-;; 								   (case-label after)
-;; 								   (label after)
-;; 								   (access-label after)))
-;;     (c-cleanup-list             . (scope-operator
-;; 								   empty-defun-braces
-;; 								   defun-close-semi))
-;;     (c-offsets-alist            . ((arglist-close . c-lineup-arglist)
-;; 								   (substatement-open . 0)
-;; 								   (case-label        . 4)
-;; 								   (block-open        . 0)
-;; 								   (knr-argdecl-intro . -)))
-;;     (c-echo-syntactic-information-p . t)
-;;     )
-;;   "My C Programming Style")
-
-
-;; Customizations for all of c-mode, c++-mode, and objc-mode
-(defun my-c-mode-common-hook ()
-  ;; add my personal style and set it for the current buffer
-  (font-lock-mode)
-  ;; show compiler-warning on edit buffer
-  (cwarn-mode)
-;;  (c-add-style "PERSONAL" my-c-style t)
-  ;; offset customizations not in my-c-style
-  (c-set-offset 'member-init-intro '++)
-  ;; other customizations
-  (setq tab-width 4
-	;; this will make sure spaces are used instead of tabs
-	tab-to-tab-stop)
-  ;; we like auto-newline and hungry-delete
-;  (c-toggle-auto-hungry-state 1)
-  ;; keybindings for all supported languages.  We can put these in
-  ;; c-mode-base-map because c-mode-map, c++-mode-map, objc-mode-map,
-  ;; java-mode-map, and idl-mode-map inherit from it.
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
-  ;;-----------------------------------
-  ;; add settings for ALTIBASE
-  ;;-----------------------------------
-  (c-set-style "stroustrup")
-  (c-set-offset 'case-label '+)
-  (c-set-offset 'statement-case-open '+)
-  (c-set-offset 'inline-open 0)
-;;  (set-variable 'c-backslash-max-column 76)
-)
-
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 ;; setting tab-width to 4 does not work, c-basic-offset works!
-(setq-default c-basic-offset 4)
-
-;;; do not use tab character
-(setq-default indent-tabs-mode nil)
+(setq-default c-basic-offset 8)
 
 (setq auto-mode-alist
       (append
@@ -173,26 +126,26 @@
       )
 
 (add-hook 'java-mode-hook
-	  (function (lambda ()
-		      (c-set-style "java"))))
+          (function (lambda ()
+                      (c-set-style "java"))))
 
-(global-set-key [C-f4] 'c-func-ide-test-through) ; 
-(global-set-key [C-f5] 'c-func-body)
-(global-set-key [C-f6] 'c-func-test-raise)   ; ide-test-raise
-(global-set-key [C-f7] 'c-func-ide-exception)   
-(global-set-key [C-f8] 'c-func-ide-exception-end) 
-(global-set-key [C-f10] 'c-comment)   ; comment 
+;; (global-set-key [C-f4] 'c-func-ide-test-through)
+;; (global-set-key [C-f5] 'c-func-body)
+;; (global-set-key [C-f6] 'c-func-test-raise)   ; ide-test-raise
+;; (global-set-key [C-f7] 'c-func-ide-exception)
+;; (global-set-key [C-f8] 'c-func-ide-exception-end)
+;; (global-set-key [C-f10] 'c-comment)   ; comment
 
 
 (if (and (eq system-type 'windows-nt) ; for Windows
          (null window-system))
     (progn
       (setq-default grep-command "grep -n -e --color")
-      (setq-default grep-find-command 
+      (setq-default grep-find-command
                     '("find . -type f -exec grep -n -e {} /dev/null \\;" . 32))
       (setq-default grep-find-use-xargs nil))
     ;; for Linux
-    (setq-default grep-command "grep -nH --color --exclude-dir=.svn -e "))
+    (setq-default grep-command "grep -nHI --color --exclude-dir=.svn --exclude-dir=.git -se "))
 
 ;;; =============================================================
 ;;; Version Control
@@ -210,10 +163,16 @@
 (setq load-path (cons "~/env/els" load-path))
 
 
+;(pc-selection-mode)
+;(pc-bindings-mode)
+
+
 (set-foreground-color "black")
 (set-background-color "white")
 (set-face-foreground 'region "white")
 (set-face-background 'region "gray")
+;(set-face-foreground 'modeline "lightsteelblue")
+;(set-face-background 'modeline "midnightblue")
 (set-cursor-color "black")
 
 ;color theme
@@ -230,7 +189,7 @@
 
 
 (setq blink-matching-delay 0.1)
-(setq standard-indent 4)
+;(setq standard-indent 4)
 (setq scroll-step 1)
 
 (custom-set-variables
@@ -252,6 +211,7 @@
 
 ;; set font
 (set-face-font 'default "-*-terminus-medium-r-normal-*-16-*-*-*-*-*-*-*")
+
 
 ;; function to reload .emacs
 (defun reload-dotemacs ()
@@ -288,13 +248,6 @@
 
 (setq gdb-many-windows t) ; open info windows for gdb
 
-;; TRAMP
-(setq tramp-default-method "ssh")
-(setq tramp-chunksize 300)
-
-; speed!
-;(setq svn-status-verbose nil)
-
 ;; GNU GLOBAL for source tag
 (setq load-path (cons "/usr/share/emacs/site-lisp/global/" load-path))
 (autoload 'gtags-mode "gtags"
@@ -302,20 +255,17 @@
 (add-hook 'c-mode-common-hook
           (lambda () (gtags-mode 1)))
 
-; slime
-;; (setq inferior-lisp-program "/usr/bin/clisp") ; your Lisp system
-;; (setq load-path (cons "/usr/share/emacs/site-lisp/slime/" load-path))
-;; (require 'slime)
-;; (slime-setup)
-
-
-
-(setq gdb-many-windows t) ; open info windows for gdb
 
 (iswitchb-mode)
 (which-function-mode)
 ; always insert indent at ENTER-key
 (define-key global-map (kbd "RET") 'newline-and-indent)
+
+
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+
 
 
 ; M-x fullscreen
@@ -325,10 +275,12 @@
                          '(2 "_NET_WM_STATE_FULLSCREEN" 0)))
 
 
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
 
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
 (eshell)
-
-
 
