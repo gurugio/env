@@ -19,4 +19,4 @@ echo "Linking .emacs to env/emacs..."
 rm -rf ${HOME}/.emacs
 ln -s ${HOME}/env/emacs ${HOME}/.emacs
 
-
+sudo apt-get install vim emacs emacs-goodies-el xfonts-terminus
