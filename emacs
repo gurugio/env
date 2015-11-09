@@ -256,7 +256,6 @@
           (lambda () (gtags-mode 1)))
 
 
-(iswitchb-mode)
 (which-function-mode)
 ; always insert indent at ENTER-key
 (define-key global-map (kbd "RET") 'newline-and-indent)
