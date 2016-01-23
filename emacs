@@ -279,6 +279,14 @@
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 
+;; lisp development with sbcl+slime
+(load (expand-file-name "~/lisp/slime-helper.el"))
+;; Replace "sbcl" with the path to your implementation
+(setq inferior-lisp-program "sbcl")
+
+;; disable beep sound and enable flash
+(setq visible-bell 1)
+
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
 (eshell)
