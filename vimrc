@@ -363,21 +363,21 @@ nmap ,vt :call Vts()<cr>
 
 " cscope 데이터베이스 파일 읽기
 " 현재 디렉토리에 cscope.out 파일이 있어야 cscope가 실행됨
-if filereadable("./cscope.out")
-        cs add cscope.out
-else
-    if filereadable("/home/gurugio/work/product/trunk/core/cscope.out")
-        cs add /home/gurugio/work/product/trunk/core/cscope.out
-    endif
-endif
+"if filereadable("./cscope.out")
+"        cs add cscope.out
+"else
+"    if filereadable("/home/gurugio/work/product/trunk/core/cscope.out")
+"        cs add /home/gurugio/work/product/trunk/core/cscope.out
+"    endif
+"endif
 " stdc 헤더 추가
-if filereadable("/usr/include/cscope.out")
-        cs add /usr/include/cscope.out
-endif
+"if filereadable("/usr/include/cscope.out")
+"        cs add /usr/include/cscope.out
+"endif
 
 
 
-set csverb
+"set csverb
 
 
 " ,css 명령은 :cs find s <symbol> 과 같은 역할을 함 (심볼 찾기)

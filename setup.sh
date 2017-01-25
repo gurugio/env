@@ -8,15 +8,19 @@ then
  cp -r * ~/env
 fi
 
-echo "Building .vimrc and .gvimrc..."
+echo "Building .vimrc and .gvimrc"
 echo "source ${HOME}/env/vimrc" > ${HOME}/.vimrc
 
 echo "Linking .vim to env/vim..."
-rm -rf ${HOME}/.vim
+mv ${HOME}/.vim ${HOME}/env/vim.bak
 ln -s ${HOME}/env/vim ${HOME}/.vim
 
-echo "Linking .emacs to env/emacs..."
-rm -rf ${HOME}/.emacs
+echo "Linking .emacs to env/emacs"
+mv ${HOME}/.emacs ${HOME}/env/emacs.bak
 ln -s ${HOME}/env/emacs ${HOME}/.emacs
 
-sudo apt-get install vim emacs emacs-goodies-el xfonts-terminus
+echo "Linking .muttrc to env/muttrc"
+mv ${HOME}/.muttrc ${HOME}/env/muttrc.bak
+ln -s ${HOME}/env/muttrc ${HOME}/.muttrc
+
+sudo apt-get install vim emacs emacs-goodies-el xfonts-terminus mutt msmtp

@@ -279,6 +279,15 @@
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 
+;(setq inferior-lisp-program "sbcl")
+;(load (expand-file-name "~/lisp/slime-helper.el"))
+
+
+;; rust-mode
+;(add-to-list 'load-path "~/rust-mode/")
+;(autoload 'rust-mode "rust-mode" nil t)
+;(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
 (eshell)
