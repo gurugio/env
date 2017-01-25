@@ -1,5 +1,3 @@
-
-
 #======================= IMAP =====================
 set imap_user = 'gi-oh.kim@profitbricks.com'
 set imap_pass = 'guru3187'
@@ -42,3 +40,7 @@ set timeout=30 # pull mails every 10 seconds
 set sort=threads
 set sort_browser=date
 set sort_aux=reverse-last-date-received
+
+# scroll inside an email with arrow keys
+bind pager <up> previous-line #scroll inside the message rather than the index
+bind pager <down> next-line
