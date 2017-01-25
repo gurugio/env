@@ -282,11 +282,13 @@
 ;(setq inferior-lisp-program "sbcl")
 ;(load (expand-file-name "~/lisp/slime-helper.el"))
 
-
 ;; rust-mode
 ;(add-to-list 'load-path "~/rust-mode/")
 ;(autoload 'rust-mode "rust-mode" nil t)
 ;(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+
+;; disable beep sound and enable flash
+(setq visible-bell 1)
 
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
