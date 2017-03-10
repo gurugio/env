@@ -44,3 +44,18 @@ set sort_aux=reverse-last-date-received
 # scroll inside an email with arrow keys
 bind pager <up> previous-line #scroll inside the message rather than the index
 bind pager <down> next-line
+set signature="env/mutt_signature"
+
+# auto-completion email address with tab or q
+set query_command="goobook query %s"
+macro index,pager a "<pipe-message>goobook add<return>" "add sender to google contacts"
+bind editor <Tab> complete-query
+
+# highlight for diff file
+color body green default "^diff \-.*"
+color body green default "^index [a-f0-9].*"
+color body green default "^\-\-\- .*"
+color body green default "^[\+]{3} .*"
+color body cyan default "^[\+][^\+]+.*"
+color body red  default "^\-[^\-]+.*"
+color body brightblue default "^@@ .*"
