@@ -110,8 +110,6 @@ set fileencoding=euc-kr
 set fileencodings=euc-kr,utf-8
 set cinoptions+=(0,W4
 set fo+=t
-set textwidth=80
-
 
 " highlight doxygen comment
 let g:load_doxygen_syntax=1
@@ -126,7 +124,7 @@ set ai     " 자동 들여쓰기
 set showmode
 "set wrap  " 자동으로 <CR> 삽입
 set nobackup
-set textwidth=79  " 한 줄이 79글자가 넘어가면 줄넘김
+"set textwidth=79  " 한 줄이 79글자가 넘어가면 줄넘김
 
 
 " GREP options 는 쉘 환경변수 GREP_OPTIONS 로 세팅
