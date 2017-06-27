@@ -2,6 +2,13 @@
 ;  Author: Deogtae Kim <dtkim@calab.kaist.ac.kr>, 1999/04/30
 
 ; default initialization library is loaded
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (setq inhibit-default-init nil)
 
 ;;; =============================================================
@@ -252,8 +259,11 @@
 (setq load-path (cons "/usr/share/emacs/site-lisp/global/" load-path))
 (autoload 'gtags-mode "gtags"
   "Minor mode for browsing source code using GLOBAL" t)
-(add-hook 'c-mode-common-hook
+(add-hook 'c-mode-hook
           (lambda () (gtags-mode 1)))
+;; Those values must be setup for key-binding of emacs-25
+(setq gtags-suggested-key-mapping t)
+(setq gtags-auto-update t)
 
 
 (which-function-mode)
