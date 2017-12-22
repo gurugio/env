@@ -82,11 +82,11 @@
 
 ;(load "cc-mode")
 
-(setq c-indent-level 8)
-(setq c-label-offset 8)
+(setq c-indent-level 4)
+(setq c-label-offset 4)
 (setq-default indent-tabs-mode t) ; use tab
-(setq-default tab-width 8)
-(setq tab-width 8)
+(setq-default tab-width 4)
+(setq tab-width 4)
 
 (setq sh-basic-offset 8)
 (setq sh-indentation 8)
@@ -104,7 +104,7 @@
 
 
 ;; setting tab-width to 4 does not work, c-basic-offset works!
-(setq-default c-basic-offset 8)
+(setq-default c-basic-offset 4)
 
 (setq auto-mode-alist
       (append
