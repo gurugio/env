@@ -302,5 +302,9 @@
 
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
+
+; reload files automatically
+(setq global-auto-revert-mode 1)
+
 (eshell)
 
