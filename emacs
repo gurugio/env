@@ -293,9 +293,9 @@
 ;(load (expand-file-name "~/lisp/slime-helper.el"))
 
 ;; rust-mode
-;(add-to-list 'load-path "~/rust-mode/")
-;(autoload 'rust-mode "rust-mode" nil t)
-;(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+(add-to-list 'load-path "~/.emacs.d/rust-mode/")
+(autoload 'rust-mode "rust-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
 ;; disable beep sound and enable flash
 (setq visible-bell 1)
@@ -306,5 +306,5 @@
 ; reload files automatically
 (setq global-auto-revert-mode 1)
 
-(eshell)
+(shell)
 
