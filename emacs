@@ -184,6 +184,7 @@
 
 ;color theme dir
 (add-to-list 'custom-theme-load-path "~/env/els/")
+(load-theme 'charcoal-black t)
 
 
 (setq line-number-mode t)
@@ -201,6 +202,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(custom-safe-themes
+   (quote
+	("624f3b1e86a81d1873b93edc3cce0947f2042bfeebecc480b393ff1e0aa4abfd" default)))
  '(default-input-method "korean-hangul")
  '(ecb-options-version "2.32")
  '(inhibit-startup-screen t)
