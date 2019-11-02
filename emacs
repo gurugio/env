@@ -166,7 +166,7 @@
 ;; To see available colors, run `M-x list-colors-dislay'
 
 ;; include extra emacs library
-(setq load-path (cons "/usr/share/emacs/site-lisp/emacs-goodies-el/" load-path))
+;(setq load-path (cons "/usr/share/emacs/site-lisp/emacs-goodies-el/" load-path))
 (setq load-path (cons "~/env/els" load-path))
 
 
@@ -182,13 +182,9 @@
 ;(set-face-background 'modeline "midnightblue")
 (set-cursor-color "black")
 
-;color theme
-; this path is default at Ubuntu
-(require 'color-theme)
-; If color-theme-initlaize is defined, call it
-(if (fboundp 'color-theme-initialize)
-    (color-theme-initialize))
-(color-theme-charcoal-black)
+;color theme dir
+(add-to-list 'custom-theme-load-path "~/env/els/")
+
 
 (setq line-number-mode t)
 (require 'linum)
@@ -200,16 +196,25 @@
 (setq scroll-step 1)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(default-input-method "korean-hangul")
  '(ecb-options-version "2.32")
  '(inhibit-startup-screen t)
+ '(package-selected-packages (quote (zenburn-theme elpy use-package rust-mode)))
  '(show-paren-mode t)
- '(speedbar-frame-parameters (quote ((minibuffer) (width . 20) (border-width . 0) (menu-bar-lines . 0) (tool-bar-lines . 0) (unsplittable . t) (set-background-color "black"))))
+ '(speedbar-frame-parameters
+   (quote
+	((minibuffer)
+	 (width . 20)
+	 (border-width . 0)
+	 (menu-bar-lines . 0)
+	 (tool-bar-lines . 0)
+	 (unsplittable . t)
+	 (set-background-color "black"))))
  '(tool-bar-mode nil nil (tool-bar))
  '(transient-mark-mode t))
 
@@ -247,10 +252,10 @@
 
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 (setq gdb-many-windows t) ; open info windows for gdb
@@ -270,11 +275,17 @@
 ; always insert indent at ENTER-key
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
-
+;; enable use-package
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/")
+             t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(package-initialize)
+(when (not (package-installed-p 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 
 ; M-x fullscreen
@@ -284,23 +295,17 @@
                          '(2 "_NET_WM_STATE_FULLSCREEN" 0)))
 
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
-
-;(setq inferior-lisp-program "sbcl")
-;(load (expand-file-name "~/lisp/slime-helper.el"))
-
-;; rust-mode
-;(add-to-list 'load-path "~/rust-mode/")
-;(autoload 'rust-mode "rust-mode" nil t)
-;(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-
 ;; disable beep sound and enable flash
 (setq visible-bell 1)
 
 ; activate TAB in eshell - ssh mode
 (setq eshell-cmpl-dir-ignore "\\`\\(CVS\\)/\\'")
+
+(menu-bar-mode -1)
+
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
 (eshell)
 
