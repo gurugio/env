@@ -184,11 +184,16 @@
 
 ;color theme
 ; this path is default at Ubuntu
+(add-to-list 'load-path "~/env/els/color-theme-6.6.0")
 (require 'color-theme)
 ; If color-theme-initlaize is defined, call it
-(if (fboundp 'color-theme-initialize)
-    (color-theme-initialize))
+;(if (fboundp 'color-theme-initialize)
+(add-to-list 'custom-theme-load-path "~/env/els/")
+(color-theme-initialize)
 (color-theme-charcoal-black)
+;(load-theme 'zenburn t)
+;(load-theme 'spacemacs-dark t)
+;(load-theme 'monokai t)
 
 (setq line-number-mode t)
 (require 'linum)
@@ -200,16 +205,27 @@
 (setq scroll-step 1)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(default-input-method "korean-hangul")
  '(ecb-options-version "2.32")
  '(inhibit-startup-screen t)
+ '(package-selected-packages
+   (quote
+    (zenburn-theme tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode)))
  '(show-paren-mode t)
- '(speedbar-frame-parameters (quote ((minibuffer) (width . 20) (border-width . 0) (menu-bar-lines . 0) (tool-bar-lines . 0) (unsplittable . t) (set-background-color "black"))))
+ '(speedbar-frame-parameters
+   (quote
+    ((minibuffer)
+     (width . 20)
+     (border-width . 0)
+     (menu-bar-lines . 0)
+     (tool-bar-lines . 0)
+     (unsplittable . t)
+     (set-background-color "black"))))
  '(tool-bar-mode nil nil (tool-bar))
  '(transient-mark-mode t))
 
@@ -247,10 +263,10 @@
 
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 (setq gdb-many-windows t) ; open info windows for gdb
@@ -305,6 +321,4 @@
 
 ; reload files automatically
 (setq global-auto-revert-mode 1)
-
-(shell)
 
