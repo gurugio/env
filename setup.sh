@@ -23,4 +23,4 @@ echo "Linking .muttrc to env/muttrc"
 mv ${HOME}/.muttrc ${HOME}/env/muttrc.bak
 ln -s ${HOME}/env/muttrc ${HOME}/.muttrc
 
-sudo apt-get install vim emacs emacs-goodies-el xfonts-terminus terminator ibus-hangul gnome-tweak-tool
+sudo apt-get install vim emacs emacs-goodies-el xfonts-terminus terminator
