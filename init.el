@@ -77,11 +77,9 @@
 ;; ====================================
 ;; style setup
 ;; ====================================
-(add-hook 'python-mode-hook
-	  (lambda ()
-	    (setq indent-tabs-mode nul)
-	    (setq tab-width 4)
-	    (setq python-indent-offset 4)))
+
+;; NEVER make hook for python such as (add-hook 'python-mode-hook...
+;; That will remove all setting for elpy and flycheck
 
 (add-hook 'c-mode-hook
           (lambda ()
