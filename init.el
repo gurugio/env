@@ -91,6 +91,11 @@
 	    (gtags-mode 1)))
 
 (set-face-font 'default "-*-terminus-medium-r-normal-*-16-*-*-*-*-*-*-*")
+(tool-bar-mode -1) ;; remove tool-bar
+(menu-bar-mode -1) ;; remove menu-bar
+;; revert buffer to saved file
+;; If a file is modified by another program, emacs will reload the file automatically.
+(global-auto-revert-mode 1)
 
 ;; ====================================
 ;; User-Defined init.el ends here
