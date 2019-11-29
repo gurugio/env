@@ -98,6 +98,7 @@
 (global-auto-revert-mode 1)
 (setq visible-bell 1) ;; flash screen instead of beep sound
 (show-paren-mode 1) ;; hlight matching brackets when your cursor is on one of the bracket.
+(setq scroll-step 1) ;; scroll one by one lines
 
 ;; ====================================
 ;; User-Defined init.el ends here
