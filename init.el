@@ -90,6 +90,15 @@
 	    (setq tab-width 8)
 	    (gtags-mode 1)))
 
+(add-hook 'c++-mode-hook
+          (lambda ()
+	    (setq c-indent-level 4)
+	    (setq c-default-style "linux")
+	    (setq c-basic-offset 4)
+	    (setq indent-tabs-mode t)
+	    (setq tab-width 4)
+	    (gtags-mode 1)))
+
 (set-face-font 'default "-*-terminus-medium-r-normal-*-16-*-*-*-*-*-*-*")
 (tool-bar-mode -1) ;; remove tool-bar
 (menu-bar-mode -1) ;; remove menu-bar
@@ -99,6 +108,7 @@
 (setq visible-bell 1) ;; flash screen instead of beep sound
 (show-paren-mode 1) ;; hlight matching brackets when your cursor is on one of the bracket.
 (setq scroll-step 1) ;; scroll one by one lines
+(setq python-indent-guess-indent-offset-verbose nil) ;; remove error "Can't guess python-indent-offset"
 
 ;; ====================================
 ;; User-Defined init.el ends here
