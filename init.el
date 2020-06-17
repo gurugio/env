@@ -63,8 +63,12 @@
 
 ;; Enable autopep8
 ;; It detects the convention errors and fix them when saving the file.
-(require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+;(require 'py-autopep8)
+;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; GNU GLOBAL for source tag
 (autoload 'gtags-mode "gtags"
