@@ -111,8 +111,17 @@
 (global-auto-revert-mode 1)
 (setq visible-bell 1) ;; flash screen instead of beep sound
 (show-paren-mode 1) ;; hlight matching brackets when your cursor is on one of the bracket.
-(setq scroll-step 1) ;; scroll one by one lines
+(setq scroll-step 1
+    scroll-conservatively 10000) ;; scroll one by one lines 
+
 (setq python-indent-guess-indent-offset-verbose nil) ;; remove error "Can't guess python-indent-offset"
+
+(add-to-list 'load-path "/home/gkim/env/els/rust-mode/")
+(autoload 'rust-mode "rust-mode" nil t)
+(add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil)))
+(setq column-number-mode t)
+
 
 ;; ====================================
 ;; User-Defined init.el ends here
@@ -123,7 +132,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (blacken py-autopep8 tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme material-theme flycheck elpy better-defaults))))
+    (rust-mode blacken py-autopep8 tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme material-theme flycheck elpy better-defaults))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
