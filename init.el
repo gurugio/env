@@ -27,7 +27,7 @@
   '(better-defaults                 ;; Set up some better Emacs defaults
     material-theme                  ;; Theme
     better-defaults
-    tabbar session pod-mode markdown-mode initsplit browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme                  ;; just some packages I used before
+    tabbar session markdown-mode initsplit browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme                  ;; just some packages I used before
     elpy                            ;; Emacs Lisp Python Environment
     flycheck                        ;; On the fly syntax checking
     py-autopep8                     ;; Run autopep8 on save
@@ -116,11 +116,12 @@
 
 (setq python-indent-guess-indent-offset-verbose nil) ;; remove error "Can't guess python-indent-offset"
 
-(add-to-list 'load-path "/home/gkim/env/els/rust-mode/")
-(autoload 'rust-mode "rust-mode" nil t)
-(add-hook 'rust-mode-hook
-          (lambda () (setq indent-tabs-mode nil)))
+;(add-to-list 'load-path "/home/gkim/env/els/rust-mode/")
+;(autoload 'rust-mode "rust-mode" nil t)
+;(add-hook 'rust-mode-hook
+;          (lambda () (setq indent-tabs-mode nil)))
 (setq column-number-mode t)
+(setq linum-format "%d ")
 
 
 ;; ====================================
@@ -131,7 +132,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rust-mode blacken py-autopep8 tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme material-theme flycheck elpy better-defaults)))
+   '(rust-mode blacken py-autopep8 tabbar session mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme material-theme flycheck elpy better-defaults)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
