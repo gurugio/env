@@ -116,10 +116,10 @@
 
 (setq python-indent-guess-indent-offset-verbose nil) ;; remove error "Can't guess python-indent-offset"
 
-;(add-to-list 'load-path "/home/gkim/env/els/rust-mode/")
-;(autoload 'rust-mode "rust-mode" nil t)
-;(add-hook 'rust-mode-hook
-;          (lambda () (setq indent-tabs-mode nil)))
+; install rust-mode from github
+(require 'rust-mode)
+(add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil)))
 (setq column-number-mode t)
 (setq linum-format "%d ")
 
