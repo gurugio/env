@@ -26,12 +26,9 @@
 (defvar myPackages
   '(better-defaults                 ;; Set up some better Emacs defaults
     material-theme                  ;; Theme
-    better-defaults
     tabbar session markdown-mode initsplit browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme                  ;; just some packages I used before
-    elpy                            ;; Emacs Lisp Python Environment
-    flycheck                        ;; On the fly syntax checking
-    py-autopep8                     ;; Run autopep8 on save
     blacken                         ;; Black formatting on save
+    rust-mode
     )
   )
 
@@ -53,22 +50,6 @@
 ;; ====================================
 ;; Development packages
 ;; ====================================
-;; Enable elpy
-(elpy-enable)
-
-;; Enable Flycheck
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
-
-;; Enable autopep8
-;; It detects the convention errors and fix them when saving the file.
-;(require 'py-autopep8)
-;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-
-
-(require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; GNU GLOBAL for source tag
 (autoload 'gtags-mode "gtags"
@@ -81,9 +62,6 @@
 ;; ====================================
 ;; style setup
 ;; ====================================
-
-;; NEVER make hook for python such as (add-hook 'python-mode-hook...
-;; That will remove all setting for elpy and flycheck
 
 (add-hook 'c-mode-hook
           (lambda ()
@@ -132,7 +110,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rust-mode blacken py-autopep8 tabbar session mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme material-theme flycheck elpy better-defaults)))
+   '(rust-mode blacken tabbar session markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode zenburn-theme material-theme better-defaults)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
