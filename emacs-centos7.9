@@ -1,0 +1,56 @@
+;; ===================================
+;; Basic Customization
+;; ===================================
+
+(setq inhibit-startup-message t)    ;; Hide the startup message
+;;(load-theme 'material t)            ;; Load material theme
+(global-linum-mode t)               ;; Enable line numbers globally
+
+;; ====================================
+;; Development packages
+;; ====================================
+
+;; GNU GLOBAL for source tag: yum install global
+(autoload 'gtags-mode "gtags"
+  "Minor mode for browsing source code using GLOBAL" t)
+;; Those values must be setup for key-binding of emacs-25
+(setq gtags-suggested-key-mapping t)
+(setq gtags-auto-update t)
+
+
+;; ====================================
+;; style setup
+;; ====================================
+
+(add-hook 'c-mode-hook
+          (lambda ()
+	    (setq c-indent-level 8)
+	    (setq c-default-style "linux")
+	    (setq c-basic-offset 8)
+	    (setq indent-tabs-mode t)
+	    (setq tab-width 8)
+	    (gtags-mode 1)))
+
+(add-hook 'c++-mode-hook
+          (lambda ()
+	    (setq c-indent-level 4)
+	    (setq c-default-style "linux")
+	    (setq c-basic-offset 4)
+	    (setq indent-tabs-mode t)
+	    (setq tab-width 4)
+	    (gtags-mode 1)))
+
+;;(set-face-font 'default "-*-terminus-medium-r-normal-*-16-*-*-*-*-*-*-*")
+(tool-bar-mode -1) ;; remove tool-bar
+(menu-bar-mode -1) ;; remove menu-bar
+;; revert buffer to saved file
+;; If a file is modified by another program, emacs will reload the file automatically.
+(global-auto-revert-mode 1)
+(setq visible-bell 1) ;; flash screen instead of beep sound
+(show-paren-mode 1) ;; hlight matching brackets when your cursor is on one of the bracket.
+(setq scroll-step 1
+    scroll-conservatively 10000) ;; scroll one by one lines
+
+
+(setq column-number-mode t)
+(setq linum-format "%d ")
