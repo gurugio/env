@@ -10,7 +10,8 @@
 ;; Development packages
 ;; ====================================
 
-;; GNU GLOBAL for source tag: yum install global
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/")
+;; GNU GLOBAL for source tag
 (autoload 'gtags-mode "gtags"
   "Minor mode for browsing source code using GLOBAL" t)
 ;; Those values must be setup for key-binding of emacs-25
@@ -54,3 +55,8 @@
 
 (setq column-number-mode t)
 (setq linum-format "%d ")
+
+(add-to-list 'load-path "/home1/irteamsu/.emacs.d/color-theme-6.6.0")
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-charcoal-black)
