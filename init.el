@@ -45,7 +45,8 @@
 
 (setq inhibit-startup-message t)    ;; Hide the startup message
 (load-theme 'material t)            ;; Load material theme
-(global-linum-mode t)               ;; Enable line numbers globally
+(global-display-line-numbers-mode 1) ;; Enable line numbers globally
+
 
 ;; ====================================
 ;; Development packages
